@@ -55,7 +55,7 @@ app.post("/commission", async (req, res) => {
             `${data.references}`,
             ``,
             `**Payment:** ${data.paymentMethod} — ${data.paymentEmail}`,
-            `**Subtotal:**`
+            `**Subtotal:**`,
             `# $${data.subtotal}`
         ].join("\n");
 
