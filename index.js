@@ -34,8 +34,7 @@ app.post("/commission", async (req, res) => {
         const commissionId = crypto.randomUUID();
 
         const message = [
-            `**New ${data.source} Commission Request**`,
-            ``,
+            `# New ${data.source} Commission Request`,
             `**Name:** ${data.name}`,
             `**Contact:** ${data.contactMethod} — ${data.contactDetails}`,
             `**Category:** ${data.category}`,
@@ -55,7 +54,9 @@ app.post("/commission", async (req, res) => {
             `**References:**`,
             `${data.references}`,
             ``,
-            `**Subtotal:** $${data.subtotal}`
+            `**Payment:** ${data.paymentMethod} — ${data.paymentEmail}`,
+            `**Subtotal:**`
+            `# $${data.subtotal}`
         ].join("\n");
 
         const dmChannel = await rest.post(Routes.userChannels(), {
