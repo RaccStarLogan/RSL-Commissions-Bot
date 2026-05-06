@@ -75,13 +75,13 @@ app.post("/commission", async (req, res) => {
                                 type: 2,
                                 style: 3,
                                 label: "Accept",
-                                custom_id: `accept_${commissionId}`
+                                custom_id: `accept_${commissionId}_${data.name}`
                             },
                             {
                                 type: 2,
                                 style: 4,
                                 label: "Decline",
-                                custom_id: `decline_${commissionId}`
+                                custom_id: `decline_${commissionId}_${data.name}`
                             }
                         ]
                     }
@@ -100,18 +100,43 @@ app.post("/commission", async (req, res) => {
 client.on("interactionCreate", async interaction => {
     if (!interaction.isButton()) return;
 
-    const [action, commissionId] = interaction.customId.split("_");
+    const [action, commissionId, ...nameParts] = interaction.customId.split("_");
+    const name = nameParts.join("_");
 
     if (action === "accept") {
+        await interaction.message.edit({
+            components: [
+                {
+                    type: 1,
+                    components: [
+                        {
+                            type: 2,
+                            style: 3,
+                            label: "Accept",
+                            custom_id: `accept_${commissionId}_${name}`,
+                            disabled: true
+                        },
+                        {
+                            type: 2,
+                            style: 4,
+                            label: "Decline",
+                            custom_id: `decline_${commissionId}_${name}`,
+                            disabled: true
+                        }
+                    ]
+                }
+            ]
+        })
         await interaction.reply({
-            content: `Commission **${commissionId}** accepted.`,
-            ephemeral: true
+            content: `Commission **${name}** accepted! Please contact the client to proceed.`,
+            ephemeral: false
         });
     }
 
     if (action === "decline") {
+        await interaction.message.delete();
         await interaction.reply({
-            content: `Commission **${commissionId}** declined.`,
+            content: `Commission **${name}** declined.`,
             ephemeral: true
         });
     }
