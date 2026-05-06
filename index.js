@@ -128,7 +128,7 @@ client.on("interactionCreate", async interaction => {
             ]
         })
         await interaction.reply({
-            content: `Commission **${name}** accepted! Please contact the client to proceed.`,
+            content: `Commission from **${name}** accepted! Please contact the client to proceed.`,
             ephemeral: false
         });
     }
@@ -136,7 +136,7 @@ client.on("interactionCreate", async interaction => {
     if (action === "decline") {
         await interaction.message.delete();
         await interaction.reply({
-            content: `Commission **${name}** declined.`,
+            content: `Commission from **${name}** declined.`,
             ephemeral: true
         });
     }
