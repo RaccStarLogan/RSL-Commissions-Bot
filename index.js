@@ -153,19 +153,19 @@ client.on("interactionCreate", async interaction => {
 //  Custom      4 <-- this is kind of undocumented so idk
 //  Competing   5 <-- i've never seen this in practice...
 const statuses = [
-    { name: "your commissions 👀", type: 3 },
-    { name: "Logan VS Backend Dev", type: 2 },
-    { name: "the queue fill up", type: 3 },
-    { name: "Please Don't Crash", type: 0 },
-    { name: "commission ideas", type: 2 },
-    { name: "REDRIFT", type: 3 },
-    { name: "Logan try to be normal", type: 3 },
-    { name: "Jesper's guitar playing", type: 2 },
-    { name: "Jesper on a mission", type: 3 },
-    { name: "Jason… unfortunately", type: 2 },
-    { name: "Wyvern's weird music taste", type: 2 },
-    { name: "Azrian cook for Zeke", type: 3 },
-    { name: "Judas from afar", type: 3 },
+    { name: "Watching your commissions 👀", type: 3 },
+    { name: "Listening to Logan VS Backend Dev", type: 2 },
+    { name: "Watching the queue fill up", type: 3 },
+    { name: "Playing Please Don't Crash", type: 0 },
+    { name: "Listening to commission ideas", type: 2 },
+    { name: "Watching REDRIFT", type: 3 },
+    { name: "Watching Logan try to be normal", type: 3 },
+    { name: "Listening to Jesper's guitar playing", type: 2 },
+    { name: "Watching Jesper on a mission", type: 3 },
+    { name: "Listening to Jason… unfortunately", type: 2 },
+    { name: "Listening to Wyvern's weird music taste", type: 2 },
+    { name: "Watching Azrian cook for Zeke", type: 3 },
+    { name: "Watching Judas from afar", type: 3 },
 ]
 
 // Start bot
