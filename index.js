@@ -19,72 +19,81 @@ const client = new Client({
 
 // Create Express server
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // REST client for sending messages
 const rest = new REST({ version: "10" }).setToken(TOKEN);
 
 // Receive commission from Cloudflare
 app.post("/commission", async (req, res) => {
-    const data = req.body;
+    try {
+        console.log("Recieved commission:", req.body);
+        const data = req.body;
 
-    const commissionId = crypto.randomUUID();
+        const commissionId = crypto.randomUUID();
 
-    const message = [
-        `**New ${data.source} Commission Request**`,
-        ``,
-        `**Name:** ${data.name}`,
-        `**Contact:** ${data.contactMethod} — ${data.contactDetails}`,
-        `**Category:** ${data.category}`,
-        `**Type:** ${data.type || "N/A"}`,
-        ``,
-        `**Add-ons:**`,
-        `Extra Characters: ${data.addons.extraChars ? data.addons.extraCharCount : "No"}`,
-        `Background: ${data.addons.background ? "Yes" : "No"}`,
-        `Sequential: ${data.addons.sequential ? data.addons.sequentialCount : "No"}`,
-        `Animation: ${data.addons.animation ? "Yes" : "No"}`,
-        `Commercial: ${data.addons.commercial ? "Yes" : "No"}`,
-        `Rush: ${data.addons.rush ? data.addons.rushDeadline : "No"}`,
-        ``,
-        `**Details:**`,
-        `${data.details}`,
-        ``,
-        `**References:**`,
-        `${data.references}`,
-        ``,
-        `**Subtotal:** $${data.subtotal}`
-    ].join("\n");
+        const message = [
+            `**New ${data.source} Commission Request**`,
+            ``,
+            `**Name:** ${data.name}`,
+            `**Contact:** ${data.contactMethod} — ${data.contactDetails}`,
+            `**Category:** ${data.category}`,
+            `**Type:** ${data.type || "N/A"}`,
+            ``,
+            `**Add-ons:**`,
+            `Extra Characters: ${data.addons.extraChars ? data.addons.extraCharCount : "No"}`,
+            `Background: ${data.addons.background ? "Yes" : "No"}`,
+            `Sequential: ${data.addons.sequential ? data.addons.sequentialCount : "No"}`,
+            `Animation: ${data.addons.animation ? "Yes" : "No"}`,
+            `Commercial: ${data.addons.commercial ? "Yes" : "No"}`,
+            `Rush: ${data.addons.rush ? data.addons.rushDeadline : "No"}`,
+            ``,
+            `**Details:**`,
+            `${data.details}`,
+            ``,
+            `**References:**`,
+            `${data.references}`,
+            ``,
+            `**Subtotal:** $${data.subtotal}`
+        ].join("\n");
 
-    const dmChannel = await rest.post(Routes.userChannels(), {
-        body: { recipient_id: OWNER_ID }
-    });
+        const dmChannel = await rest.post(Routes.userChannels(), {
+            body: { recipient_id: OWNER_ID }
+        });
 
-    await rest.post(Routes.channelMessages(dmChannel.id), {
-        body: {
-            content: message,
-            components: [
-                {
-                    type: 1,
-                    components: [
-                        {
-                            type: 2,
-                            style: 3,
-                            label: "Accept",
-                            custom_id: `accept_${commissionId}`
-                        },
-                        {
-                            type: 2,
-                            style: 4,
-                            label: "Decline",
-                            custom_id: `decline_${commissionId}`
-                        }
-                    ]
-                }
-            ]
-        }
-    });
+        console.log("OWNER_ID:", OWNER_ID);
 
-    res.json({ ok: true });
+        await rest.post(Routes.channelMessages(dmChannel.id), {
+            body: {
+                content: message,
+                components: [
+                    {
+                        type: 1,
+                        components: [
+                            {
+                                type: 2,
+                                style: 3,
+                                label: "Accept",
+                                custom_id: `accept_${commissionId}`
+                            },
+                            {
+                                type: 2,
+                                style: 4,
+                                label: "Decline",
+                                custom_id: `decline_${commissionId}`
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        res.json({ ok: true });
+    } catch (err) {
+        console.error("Commission error", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Handle Accept/Decline buttons
