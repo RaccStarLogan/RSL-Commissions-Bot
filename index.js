@@ -143,9 +143,39 @@ client.on("interactionCreate", async interaction => {
     }
 });
 
+// Make custom statuses to cycle through
+// NOTE TO SELF:
+//  Type        Number
+//  Playing     0
+//  Streaming   1
+//  Listening   2
+//  Watching    3
+//  Custom      4 <-- this is kind of undocumented so idk
+//  Competing   5 <-- i've never seen this in practice...
+const statuses = [
+    { name: "your commissions 👀", type: 3 },
+    { name: "Logan VS Backend Dev", type: 2 },
+    { name: "the queue fill up", type: 3 },
+    { name: "Please Don't Crash", type: 0 },
+    { name: "commission ideas", type: 2 },
+    { name: "REDRIFT", type: 3 },
+    { name: "Logan try to be normal", type: 3 },
+    { name: "Jesper's guitar playing", type: 2 },
+    { name: "Jesper on a mission", type: 3 },
+    { name: "Jason… unfortunately", type: 2 },
+    { name: "Wyvern's weird music taste", type: 2 },
+    { name: "Azrian cook for Zeke", type: 3 },
+    { name: "Judas from afar", type: 3 },
+]
+
 // Start bot
 client.once("ready", () => {
     console.log(`Bot logged in as ${client.user.tag}`);
+
+    setInterval(() => {
+        const s = statuses[Math.floor(Math.random() * statuses.length)];
+        client.user.setPresence({ activities: [s], status: "online" });
+    }, 30_000);
 });
 
 client.login(TOKEN);
